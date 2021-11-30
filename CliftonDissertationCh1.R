@@ -1,4 +1,3 @@
-library(tidyverse)
 library(ggplot2)
 library(cowplot)
 st.err = function(x) {sd(x)/sqrt(length(x))}
@@ -147,7 +146,7 @@ colnames(YearlyMeanData)<-c("Year","Mean","SE")
 fig1.box<-ggplot(data=YearlyRange, aes(x=Year, y=Temp_Range))+
   geom_boxplot(outlier.shape=NA)+
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=YearlyMeanData, aes(x=Year, y=Mean), size=3, color="red")+
+  geom_point(data=YearlyMeanData, aes(x=Year, y=Mean), size=4, shape=18)+
   theme_bw()+
   theme(axis.title.x=element_blank())+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
@@ -176,7 +175,7 @@ c.st<-droplevels(c.st)
 fig2A.box<-ggplot(data=lizards.U, aes(x=Year, y=CTmin))+
   geom_boxplot(outlier.shape=NA)+ # including outlier.shape=NA removes the outlier symbol so the jitter doesn't add extra points.
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=c.us, aes(x=Year, y=CTmin), size=3, color="red")+
+  geom_point(data=c.us, aes(x=Year, y=CTmin), size=4, shape=18)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
   theme(legend.position="")+
@@ -198,7 +197,7 @@ fig2A.box<-ggplot(data=lizards.U, aes(x=Year, y=CTmin))+
 fig2B.box<-ggplot(data=lizards.S, aes(x=Year, y=CTmin))+
   geom_boxplot(outlier.shape=NA)+ 
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=c.st, aes(x=Year, y=CTmin), size=3, color="red")+
+  geom_point(data=c.st, aes(x=Year, y=CTmin), size=4, shape=18)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
   theme(legend.position="")+
@@ -220,7 +219,7 @@ fig2B.box<-ggplot(data=lizards.S, aes(x=Year, y=CTmin))+
 fig2C.box<-ggplot(data=lizards.U, aes(x=Year, y=Tbreadth))+
   geom_boxplot(outlier.shape=NA)+ 
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=c.us, aes(x=Year, y=Tbreadth), size=3, color="red")+
+  geom_point(data=c.us, aes(x=Year, y=Tbreadth), size=4, shape=18)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
   theme(legend.position="")+
@@ -239,7 +238,7 @@ fig2C.box<-ggplot(data=lizards.U, aes(x=Year, y=Tbreadth))+
 fig2D.box<-ggplot(data=lizards.S, aes(x=Year, y=Tbreadth))+
   geom_boxplot(outlier.shape=NA)+ 
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=c.st, aes(x=Year, y=Tbreadth), size=3, color="red")+
+  geom_point(data=c.st, aes(x=Year, y=Tbreadth), size=4, shape=18)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
   theme(legend.position="")+
