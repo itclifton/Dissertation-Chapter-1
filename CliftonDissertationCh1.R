@@ -1,3 +1,4 @@
+setwd("~/Desktop/Research/Dissertation Code and Data/Dissertation-Chapter-1")
 library(ggplot2)
 library(cowplot)
 st.err = function(x) {sd(x)/sqrt(length(x))}
@@ -337,3 +338,46 @@ correlations=plot_grid(CTminxTAmin, TbreadthxTAmin, CTminxTAmax, TbreadthxTAmax,
                        labels = "AUTO", ncol = 2, nrow=3, align="v")
 correlations1=plot_grid(correlations,c.legend, ncol = 1, rel_heights = c(2,.15))
 #ggsave("Correlations.png", height=13, width=10, plot=correlations1)
+
+## Supplemental Figure ----
+# Supplemental figure- Not in text
+CTmax.Us<-ggplot(data=lizards.U, aes(x=Year, y=CTmax))+ 
+  geom_boxplot(outlier.shape=NA)+ 
+  geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
+  geom_point(data=c.us, aes(x=Year, y=CTmax), size=4, shape=18)+
+  theme_bw()+
+  theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
+  theme(legend.position="")+
+  labs(title="U. stansburiana")+
+  theme(plot.title = element_text(size=16, face="bold.italic", hjust=0.5))+
+  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(legend.position="")+
+  annotate("text",
+           x = c(1, 2, 3),
+           y = c(44, 45.5, 43),
+           label = c("A", "A", "A"), fontface="bold",
+           size=6)+
+  xlab("")+
+  ylab("CTmax (°C)")
+#ggsave("CTmaxUs.jpeg", width=5, height=5, plot=CTmax.Us)
+
+# Supplemental figure- Not in text
+CTmax.St<-ggplot(data=lizards.S, aes(x=Year, y=CTmax))+ 
+  geom_boxplot(outlier.shape=NA)+ 
+  geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
+  geom_point(data=c.st, aes(x=Year, y=CTmax), size=4, shape=18)+
+  theme_bw()+
+  theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
+  theme(legend.position="")+
+  labs(title="S. tristichus")+
+  theme(plot.title = element_text(size=16, face="bold.italic", hjust=0.5))+
+  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(legend.position="")+
+  annotate("text",
+           x = c(1, 2, 3),
+           y = c(43, 42, 42.5),
+           label = c("A", "A", "A"), fontface="bold",
+           size=6)+
+  xlab("")+
+  ylab("")
+#ggsave("CTmaxSt.jpeg", width=5, height=5, plot=CTmax.St)
