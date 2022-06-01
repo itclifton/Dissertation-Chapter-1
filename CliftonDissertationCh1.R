@@ -21,18 +21,22 @@ CRC.Env$Temp_Range<-CRC.Env$airt_max-CRC.Env$airt_min
 summary(aov(CTmin~species, data=subset(lizards, Year=="2017")))
 summary(aov(CTmin~species, data=subset(lizards, Year=="2018")))
 summary(aov(CTmin~species, data=subset(lizards, Year=="2019")))
+summary(aov(CTmin~species+Year, data=lizards))
 
 summary(aov(CTmax~species, data=subset(lizards, Year=="2017")))
 summary(aov(CTmax~species, data=subset(lizards, Year=="2018")))
 summary(aov(CTmax~species, data=subset(lizards, Year=="2019")))
+summary(aov(CTmax~species+Year, data=lizards))
 
 summary(aov(Tbreadth~species, data=subset(lizards, Year=="2017")))
 summary(aov(Tbreadth~species, data=subset(lizards, Year=="2018")))
 summary(aov(Tbreadth~species, data=subset(lizards, Year=="2019")))
+summary(aov(Tbreadth~species+Year, data=lizards))
 
 summary(aov(Tb~species, data=subset(lizards, Year=="2017")))
 summary(aov(Tb~species, data=subset(lizards, Year=="2018")))
 summary(aov(Tb~species, data=subset(lizards, Year=="2019")))
+summary(aov(Tb~species+Year, data=lizards))
 
 # Differences among sampling periods
 lizards.U<-subset(lizards, species=="U. stansburiana")
@@ -173,41 +177,65 @@ c.us<-droplevels(c.us)
 c.st<-subset(c, Species=="S. tristichus")
 c.st<-droplevels(c.st)
 
-fig2A.box<-ggplot(data=lizards.U, aes(x=Year, y=CTmin))+
-  geom_boxplot(outlier.shape=NA)+ # including outlier.shape=NA removes the outlier symbol so the jitter doesn't add extra points.
+fig2A.box<-ggplot(data=lizards.S, aes(x=Year, y=CTmax))+ 
+  geom_boxplot(outlier.shape=NA)+ 
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=c.us, aes(x=Year, y=CTmin), size=4, shape=18)+
+  geom_point(data=c.st, aes(x=Year, y=CTmax), size=4, shape=18)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
   theme(legend.position="")+
-  labs(title="U. stansburiana")+
-  theme(plot.title = element_text(size=16, face="bold.italic", hjust=0.5))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  labs(title="S. tristichus")+
+  theme(plot.title = element_text(size=18, face="bold.italic", hjust=0.5))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title=element_text(size=14,face="bold"))+
   theme(legend.position="")+
   annotate("text",
            x = c(1, 2, 3),
-           y = c(12, 11.3, 10),
-           label = c("A", "B", "B"), fontface="bold",
+           y = c(43, 42, 42.5),
+           label = c("A", "A", "A"), fontface="bold",
            size=6)+
   xlab("")+
-  ylab("CTmin (°C)")
+  ylab("CTmax (°C)")+
+  scale_y_continuous(labels = label_number(accuracy = 1), limits=c(35,46))
+#ggsave("CTmaxSt.jpeg", width=5, height=5, plot=CTmax.St)
 
-fig2B.box<-ggplot(data=lizards.S, aes(x=Year, y=CTmin))+
+fig2B.box<-ggplot(data=lizards.U, aes(x=Year, y=CTmax))+ 
+  geom_boxplot(outlier.shape=NA)+ 
+  geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
+  geom_point(data=c.us, aes(x=Year, y=CTmax), size=4, shape=18)+
+  theme_bw()+
+  theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
+  theme(legend.position="")+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  labs(title="U. stansburiana")+
+  theme(plot.title = element_text(size=18, face="bold.italic", hjust=0.5))+
+  theme(axis.text=element_text(size=14,face="bold"))+
+  theme(legend.position="")+
+  annotate("text",
+           x = c(1, 2, 3),
+           y = c(44, 45.5, 43),
+           label = c("A", "A", "A"), fontface="bold",
+           size=6)+
+  xlab("")+
+  ylab("")+
+  scale_y_continuous(labels = label_number(accuracy = 1), limits=c(35,46))
+#ggsave("CTmaxUs.jpeg", width=5, height=5, plot=CTmax.Us)
+
+fig2C.box<-ggplot(data=lizards.S, aes(x=Year, y=CTmin))+
   geom_boxplot(outlier.shape=NA)+ 
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
   geom_point(data=c.st, aes(x=Year, y=CTmin), size=4, shape=18)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
   theme(legend.position="")+
-  labs(title="S. tristichus")+
-  theme(plot.title = element_text(size=16, face="bold.italic", hjust=0.5))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title=element_text(size=14,face="bold"))+
   theme(legend.position="")+
   annotate("text",
            x = c(1, 2, 3),
@@ -215,37 +243,39 @@ fig2B.box<-ggplot(data=lizards.S, aes(x=Year, y=CTmin))+
            label = c("A", "B", "B"), fontface="bold",
            size=6)+
   xlab("")+
-  ylab("")
+  ylab("CTmin (°C)")+
+  scale_y_continuous(labels = label_number(accuracy = 1), limits=c(4, 17))
 
-fig2C.box<-ggplot(data=lizards.U, aes(x=Year, y=Tbreadth))+
-  geom_boxplot(outlier.shape=NA)+ 
+fig2D.box<-ggplot(data=lizards.U, aes(x=Year, y=CTmin))+
+  geom_boxplot(outlier.shape=NA)+ # including outlier.shape=NA removes the outlier symbol so the jitter doesn't add extra points.
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=c.us, aes(x=Year, y=Tbreadth), size=4, shape=18)+
+  geom_point(data=c.us, aes(x=Year, y=CTmin), size=4, shape=18)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
   theme(legend.position="")+
-  theme(plot.title = element_text(size=16, face="bold.italic", hjust=0.5))+
-  theme(axis.title.x=element_blank())+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  theme(axis.text=element_text(size=14,face="bold"))+
   theme(legend.position="")+
   annotate("text",
            x = c(1, 2, 3),
-           y = c(36, 38.5, 38.7),
+           y = c(12, 11.3, 10),
            label = c("A", "B", "B"), fontface="bold",
            size=6)+
   xlab("")+
-  ylab("Thermal Tolerance Breadth (°C)")
+  ylab("")+
+  scale_y_continuous(labels = label_number(accuracy = 1), limits=c(4, 17))
 
-fig2D.box<-ggplot(data=lizards.S, aes(x=Year, y=Tbreadth))+
+fig2E.box<-ggplot(data=lizards.S, aes(x=Year, y=Tbreadth))+
   geom_boxplot(outlier.shape=NA)+ 
   geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
   geom_point(data=c.st, aes(x=Year, y=Tbreadth), size=4, shape=18)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
   theme(legend.position="")+
-  theme(plot.title = element_text(size=16, face="bold.italic", hjust=0.5))+
   theme(axis.title.x=element_blank())+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title=element_text(size=14,face="bold"))+
   theme(legend.position="")+
   annotate("text",
            x = c(1, 2, 3),
@@ -253,25 +283,45 @@ fig2D.box<-ggplot(data=lizards.S, aes(x=Year, y=Tbreadth))+
            label = c("A", "B", "B"), fontface="bold",
            size=6)+
   xlab("")+
-  ylab("")
+  ylab("Thermal Tolerance Breadth (°C)")+
+  scale_y_continuous(labels = label_number(accuracy = 1), limits=c(20, 40))
+
+fig2F.box<-ggplot(data=lizards.U, aes(x=Year, y=Tbreadth))+
+  geom_boxplot(outlier.shape=NA)+ 
+  geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
+  geom_point(data=c.us, aes(x=Year, y=Tbreadth), size=4, shape=18)+
+  theme_bw()+
+  theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
+  theme(legend.position="")+
+  theme(axis.title.x=element_blank())+
+  theme(axis.text=element_text(size=14,face="bold"))+
+  theme(legend.position="")+
+  annotate("text",
+           x = c(1, 2, 3),
+           y = c(36, 38.5, 38.7),
+           label = c("A", "B", "B"), fontface="bold",
+           size=6)+
+  xlab("")+
+  ylab("")+
+  scale_y_continuous(labels = label_number(accuracy = 1), limits=c(20, 40))
 
 # Make Panel
-Fig2.box=plot_grid(fig2A.box, fig2B.box, fig2C.box, fig2D.box,
+Fig2.box=plot_grid(fig2A.box, fig2B.box, fig2C.box, fig2D.box, fig2E.box, fig2F.box,
                    labels = "AUTO", ncol = 2, align="v")
-#ggsave("Fig2box.jpeg", width=7, height=8, plot=Fig2.box)
+#ggsave("Fig2box.jpeg", width=9, height=11, plot=Fig2.box)
 
 # Figure 3
 # Legend
 CorrelationLegend<-ggplot(data=lizards1, aes(x=TAmin, y=CTmin, group=Species, shape=Species))+
-  geom_point(size=4)+
-  geom_smooth(aes(linetype=Species), method='lm', formula= y~x, se=F, color="black")+
+  geom_point(size=6)+
+  geom_smooth(aes(linetype=Species), method='lm', formula= y~x, se=F, color="black", size=2)+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title=element_text(size=16,face="bold"))+
   theme(legend.position="bottom",
         legend.key.size = unit(2, 'cm'),
         legend.title = element_text(size=25, face="bold"),
-        legend.text = element_text(size=10, face="bold"))+
+        legend.text = element_text(size=18, face="bold"))+
   xlab("Minimum Air Temperature (°C)")+
   ylab("CTmin (°C)")
 
@@ -280,7 +330,7 @@ CTminxTAmin<-ggplot(data=lizards1, aes(x=TAmin, y=CTmin, group=Species, shape=Sp
   geom_smooth(aes(linetype=Species), method='lm', formula= y~x, se=F, color="black")+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title=element_text(size=16,face="bold"))+
   theme(legend.position="")+
   xlab("Minimum Air Temperature (°C)")+
   ylab("CTmin (°C)")
@@ -289,7 +339,7 @@ TbreadthxTAmin<-ggplot(data=lizards1, aes(x=TAmin, y=Tbreadth, group=Species, sh
   geom_smooth(aes(linetype=Species), method='lm', formula= y~x, se=F, color="black")+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title.y=element_text(size=14.5,face="bold"), axis.title.x=element_text(size=16,face="bold"))+
   theme(legend.position="")+
   xlab("Minimum Air Temperature (°C)")+
   ylab("Thermal Tolerance Breadth (°C)")
@@ -299,26 +349,28 @@ CTminxTAmax<-ggplot(data=lizards1, aes(x=TAmax, y=CTmin, group=Species, shape=Sp
   geom_smooth(aes(linetype=Species), method='lm', formula= y~x, se=F, color="black")+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title=element_text(size=16,face="bold"))+
   theme(legend.position="")+
   xlab("Maximum Air Temperature (°C)")+
-  ylab("CTmin (°C)")
+  ylab("CTmin (°C)")+
+  scale_x_continuous(labels = label_number(accuracy = 1), limits=c(23, 33))
 TbreadthxTAmax<-ggplot(data=lizards1, aes(x=TAmax, y=Tbreadth, group=Species, shape=Species))+
   geom_point(size=2)+
   geom_smooth(aes(linetype=Species), method='lm', formula= y~x, se=F, color="black")+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title.y=element_text(size=14.5,face="bold"), axis.title.x=element_text(size=16,face="bold"))+
   theme(legend.position="")+
   xlab("Maximum Air Temperature (°C)")+
-  ylab("Thermal Tolerance Breadth (°C)")
+  ylab("Thermal Tolerance Breadth (°C)")+
+  scale_x_continuous(labels = label_number(accuracy = 1), limits=c(23, 33))
 
 CTminxTArange<-ggplot(data=lizards1, aes(x=TArange, y=CTmin, group=Species, shape=Species))+
   geom_point(size=2)+
   geom_smooth(aes(linetype=Species), method='lm', formula= y~x, se=F, color="black")+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title=element_text(size=16,face="bold"))+
   theme(legend.position="")+
   xlab("Air Temperature Range (°C)")+
   ylab("CTmin (°C)")
@@ -327,7 +379,7 @@ TbreadthxTArange<-ggplot(data=lizards1, aes(x=TArange, y=Tbreadth, group=Species
   geom_smooth(aes(linetype=Species), method='lm', formula= y~x, se=F, color="black")+
   theme_bw()+
   theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
+  theme(axis.text=element_text(size=14,face="bold"), axis.title.y=element_text(size=14.5,face="bold"), axis.title.x=element_text(size=16,face="bold"))+
   theme(legend.position="")+
   xlab("Air Temperature Range (°C)")+
   ylab("Thermal Tolerance Breadth (°C)")
@@ -339,45 +391,3 @@ correlations=plot_grid(CTminxTAmin, TbreadthxTAmin, CTminxTAmax, TbreadthxTAmax,
 correlations1=plot_grid(correlations,c.legend, ncol = 1, rel_heights = c(2,.15))
 #ggsave("Correlations.png", height=13, width=10, plot=correlations1)
 
-## Supplemental Figure ----
-# Supplemental figure- Not in text
-CTmax.Us<-ggplot(data=lizards.U, aes(x=Year, y=CTmax))+ 
-  geom_boxplot(outlier.shape=NA)+ 
-  geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=c.us, aes(x=Year, y=CTmax), size=4, shape=18)+
-  theme_bw()+
-  theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(legend.position="")+
-  labs(title="U. stansburiana")+
-  theme(plot.title = element_text(size=16, face="bold.italic", hjust=0.5))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
-  theme(legend.position="")+
-  annotate("text",
-           x = c(1, 2, 3),
-           y = c(44, 45.5, 43),
-           label = c("A", "A", "A"), fontface="bold",
-           size=6)+
-  xlab("")+
-  ylab("CTmax (°C)")
-#ggsave("CTmaxUs.jpeg", width=5, height=5, plot=CTmax.Us)
-
-# Supplemental figure- Not in text
-CTmax.St<-ggplot(data=lizards.S, aes(x=Year, y=CTmax))+ 
-  geom_boxplot(outlier.shape=NA)+ 
-  geom_point(position=position_jitter(seed=2,width=0.15), color="gray")+
-  geom_point(data=c.st, aes(x=Year, y=CTmax), size=4, shape=18)+
-  theme_bw()+
-  theme(panel.grid.major=element_line(colour="#FFFFFF"),panel.grid.minor=element_line(colour="#FFFFFF"))+
-  theme(legend.position="")+
-  labs(title="S. tristichus")+
-  theme(plot.title = element_text(size=16, face="bold.italic", hjust=0.5))+
-  theme(axis.text=element_text(size=12,face="bold"), axis.title=element_text(size=14,face="bold"))+
-  theme(legend.position="")+
-  annotate("text",
-           x = c(1, 2, 3),
-           y = c(43, 42, 42.5),
-           label = c("A", "A", "A"), fontface="bold",
-           size=6)+
-  xlab("")+
-  ylab("")
-#ggsave("CTmaxSt.jpeg", width=5, height=5, plot=CTmax.St)
